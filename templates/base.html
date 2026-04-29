@@ -1,0 +1,105 @@
+<!-- base.html -->
+{% load static %}
+<!doctype html>
+<html>
+  <head>
+    <title>MediWay</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <style>
+      @media print {
+        .no-print {
+          display: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark no-print">
+      <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+          <img
+            src="{% static 'img/logo_.png' %}"
+            alt="MediWay"
+            height="60"
+            class="me-2"
+          />
+        </a>
+        <div class="d-flex align-items-center ms-auto flex-wrap">
+          {% if user.is_authenticated %}
+          <div class="d-flex flex-wrap align-items-center">
+            <a class="btn btn-light me-2 mb-2" href="/">
+              Home <i class="fa fa-home" aria-hidden="true"></i>
+            </a>
+            <a class="btn btn-light me-2 mb-2" href="/cart/">
+              Cart <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+            </a>
+            <a class="btn btn-light me-2 mb-2" href="/orders/">
+              Orders <i class="fa-solid fa-cart-arrow-down"></i>
+            </a>
+            {% if user.is_superuser %}
+            <a class="btn btn-info me-2 mb-2" href="/dashboard/">
+              Manage Medicines <i class="fa-solid fa-tachograph-digital"></i>
+            </a>
+            <a class="btn btn-info me-2 mb-2" href="/admin-orders/"
+              >Admin Orders <i class="fa-solid fa-cart-arrow-down"></i></a
+            >
+            <a class="btn btn-info me-2 mb-2" href="/billing/">Billing <i class="fa-solid fa-file-invoice"></i></a>
+            {% endif %}
+          </div>
+
+          <div class="dropdown ms-2">
+            <button
+              class="btn btn-secondary dropdown-toggle d-flex align-items-center"
+              type="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <span
+                class="badge bg-primary rounded-circle me-2"
+                style="
+                  width: 32px;
+                  height: 32px;
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                "
+                >{{ user.username|slice:":1"|upper }}</span
+              >
+              {{ user.username }}
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/profile/">My Profile</a></li>
+              <li><hr class="dropdown-divider" /></li>
+              <li>
+                <a class="dropdown-item text-danger" href="/logout/"
+                  >Logout <i class="fa fa-sign-out" aria-hidden="true"></i
+                ></a>
+              </li>
+            </ul>
+          </div>
+          {% else %}
+          <div class="d-flex align-items-center">
+            <a class="btn btn-success me-2" href="/login/">Login</a>
+            <a class="btn btn-primary" href="/signup/">Signup</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+    <div class="container mt-4">{% block content %} {% endblock %}</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
+</html>

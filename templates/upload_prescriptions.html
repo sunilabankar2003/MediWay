@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>Upload Prescriptions 📋</h2>
+
+  {% if error %}
+  <div class="alert alert-danger" role="alert">{{ error }}</div>
+  {% endif %}
+
+  <div class="alert alert-info" role="alert">
+    ⚠️ The following medicines require doctor's prescriptions. Please upload a
+    valid prescription for each.
+  </div>
+
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} {% for item in prescription_items %}
+    <div class="card p-3 mb-3">
+      <h5>{{ item.medicine.name }}</h5>
+      <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+      <p><strong>Price:</strong> ₹{{ item.medicine.price }}</p>
+
+      <div class="form-group">
+        <label for="prescription_{{ item.id }}" class="form-label"
+          >Upload Prescription (PDF, JPG, PNG)</label
+        >
+        <input
+          type="file"
+          class="form-control"
+          id="prescription_{{ item.id }}"
+          name="prescription_{{ item.id }}"
+          accept=".pdf,.jpg,.jpeg,.png"
+          required
+        />
+      </div>
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="btn btn-success">
+      Upload All Prescriptions & Checkout ✅
+    </button>
+    <a href="/cart/" class="btn btn-secondary">Back to Cart</a>
+  </form>
+</div>
+{% endblock %}

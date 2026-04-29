@@ -1,0 +1,119 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>Admin Order Details 📦</h2>
+  <div class="card p-3">
+    <p><strong>Order ID:</strong> #{{ order.id }}</p>
+    <p>
+      <strong>User:</strong> {{ order.user.username }} ({{ order.user.email }})
+    </p>
+    <p><strong>Medicine:</strong> {{ order.medicine.name }}</p>
+    <p><strong>Price:</strong> ₹{{ order.medicine.price }}</p>
+    <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+    <p><strong>Total:</strong> ₹{{ order.total }}</p>
+    <p><strong>Created at:</strong> {{ order.created_at|date:'M d, Y H:i' }}</p>
+    <p>
+      <strong>Status:</strong>
+      <span
+        class="badge {% if order.status == 'pending' %}bg-warning {% elif order.status == 'approved' %}bg-success {% elif order.status == 'rejected' %}bg-danger {% elif order.status == 'shipped' %}bg-info {% elif order.status == 'delivered' %}bg-primary {% endif %}"
+      >
+        {{ order.get_status_display }}
+      </span>
+    </p>
+
+    {% if order.prescription_file %}
+    <p>
+      <strong>Prescription:</strong>
+      <a
+        href="{{ order.prescription_file.url }}"
+        target="_blank"
+        class="btn btn-sm btn-outline-primary"
+      >
+        📄 View Prescription
+      </a>
+    </p>
+    {% else %}
+    <p>
+      <strong>Prescription:</strong>
+      <span class="text-muted">No prescription uploaded</span>
+    </p>
+    {% endif %}
+  </div>
+
+  <div class="card p-3 mt-3">
+    <h4>Update Order Status</h4>
+    <form method="post" action="{% url 'admin_order_detail' order.id %}">
+      {% csrf_token %}
+      <div class="mb-3">
+        <label for="status" class="form-label">Status</label>
+        <select class="form-select" id="status" name="status" required>
+          <option
+            value="pending"
+            {%
+            if
+            order.status=""
+            ="pending"
+            %}selected{%
+            endif
+            %}
+          >
+            Pending
+          </option>
+          <option
+            value="approved"
+            {%
+            if
+            order.status=""
+            ="approved"
+            %}selected{%
+            endif
+            %}
+          >
+            Approved
+          </option>
+          <option
+            value="rejected"
+            {%
+            if
+            order.status=""
+            ="rejected"
+            %}selected{%
+            endif
+            %}
+          >
+            Rejected
+          </option>
+          <option
+            value="shipped"
+            {%
+            if
+            order.status=""
+            ="shipped"
+            %}selected{%
+            endif
+            %}
+          >
+            Shipped
+          </option>
+          <option
+            value="delivered"
+            {%
+            if
+            order.status=""
+            ="delivered"
+            %}selected{%
+            endif
+            %}
+          >
+            Delivered
+          </option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-success">Update Status</button>
+    </form>
+  </div>
+
+  <a href="{% url 'admin_orders' %}" class="btn btn-primary mt-3"
+    >Back to Admin Orders</a
+  >
+</div>
+{% endblock %}

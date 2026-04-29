@@ -1,0 +1,70 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-4">
+    <div class="card shadow p-4">
+      <div class="text-center mb-3">
+        <img
+          src="{% static 'img/logo_.png' %}"
+          alt="MediWay"
+          height="40"
+          class="mb-2"
+        />
+        <h3 class="mb-0">
+          Sign Up <i class="fa fa-user-plus" aria-hidden="true"></i>
+        </h3>
+      </div>
+
+      {% if error %}
+      <p class="text-danger text-center">{{ error }}</p>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <input
+          type="text"
+          name="username"
+          value="{{ request.POST.username }}"
+          class="form-control mb-3"
+          placeholder="Username"
+          required
+        />
+
+        <input
+          type="email"
+          name="email"
+          value="{{ request.POST.email }}"
+          class="form-control mb-3"
+          placeholder="Email"
+          required
+        />
+
+        <input
+          type="password"
+          name="password"
+          value="{{ request.POST.password }}"
+          class="form-control mb-3"
+          placeholder="Password"
+          required
+        />
+
+        <input
+          type="password"
+          name="confirm_password"
+          value="{{ request.POST.confirm_password }}"
+          class="form-control mb-3"
+          placeholder="Confirm Password"
+        />
+
+        <button class="btn btn-primary w-100">Sign Up</button>
+      </form>
+
+      <p class="text-center mt-3">
+        Already have an account? <a href="/login/">Login</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

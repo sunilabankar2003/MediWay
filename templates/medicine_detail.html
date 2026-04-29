@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="card shadow p-4">
+  <div class="row align-items-center">
+    <!-- Image -->
+    <div class="col-md-5">
+      <img src="{{ medicine.image }}" class="img-fluid rounded" />
+    </div>
+
+    <!-- Details -->
+    <div class="col-md-7">
+      <h2>
+        {{ medicine.name }} {% if medicine.requires_prescription %}<span
+          class="badge bg-warning"
+          >⚕️ Prescription Required</span
+        >{% endif %}
+      </h2>
+      <h4 class="text-success">₹{{ medicine.price }}</h4>
+
+      <p><strong>Company:</strong> {{ medicine.company }}</p>
+      <p><strong>Size:</strong> {{ medicine.size }}</p>
+
+      {% if medicine.requires_prescription %}
+      <div class="alert alert-warning mt-2">
+        ⚠️ This medicine requires a valid doctor's prescription before checkout.
+      </div>
+      {% endif %} {% if medicine.safety_warning %}
+      <div class="alert alert-warning mt-2">
+        ⚠️ {{ medicine.safety_warning }}
+      </div>
+      {% endif %}
+
+      <form method="POST" action="/add-to-cart/">
+        {% csrf_token %}
+        <input type="hidden" name="medicine_id" value="{{ medicine.id }}" />
+        <button class="btn btn-primary mt-3">
+          Add to Cart <i class="fa-solid fa-cart-plus"></i>
+        </button>
+      </form>
+
+      <a href="/" class="btn btn-secondary mt-3"
+        >Back <i class="fa-solid fa-circle-left"></i
+      ></a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

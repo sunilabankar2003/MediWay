@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4 text-center">
+
+      <!-- Icon -->
+      <div class="mb-3">
+        <i class="fa-solid fa-circle-check text-success" style="font-size: 60px;"></i>
+      </div>
+
+      <!-- Title -->
+      <h3 class="text-success mb-2">Payment Successful</h3>
+
+      <!-- Message -->
+      <p class="text-muted">
+        Your order has been placed successfully.  
+        Thank you for choosing MediWay 💊
+      </p>
+
+      <hr>
+
+      <!-- Buttons -->
+      <div class="d-grid gap-2">
+
+        <a href="/orders/" class="btn btn-primary">
+          View Orders <i class="fa-solid fa-box"></i>
+        </a>
+
+        <a href="/" class="btn btn-outline-secondary">
+          Continue Shopping <i class="fa-solid fa-cart-shopping"></i>
+        </a>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

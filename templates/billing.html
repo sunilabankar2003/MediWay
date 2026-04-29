@@ -1,0 +1,110 @@
+{% extends 'base.html' %} {% block content %}
+
+<h2>Billing System 🧾</h2>
+
+<!-- Customer Form -->
+<form method="POST" action="/set-customer/">
+  {% csrf_token %}
+  <input
+    type="text"
+    name="customer_name"
+    placeholder="Name"
+    class="form-control mb-2"
+  />
+  <input
+    type="text"
+    name="mobile"
+    placeholder="Mobile"
+    class="form-control mb-2"
+  />
+  <input
+    type="email"
+    name="email"
+    class="form-control mb-2"
+    placeholder="Email"
+  />
+  <button class="btn btn-primary">Save Customer <i class="fa-solid fa-user-check"></i></button>
+</form>
+
+<hr />
+
+<!-- Show Customer -->
+{% if customer %}
+<p><strong>Customer:</strong> {{ customer.name }}</p>
+<p><strong>Mobile:</strong> {{ customer.mobile }}</p>
+{% endif %}
+
+<!-- Add Medicine -->
+<form method="POST" action="/add-to-bill/">
+  {% csrf_token %}
+  <select name="medicine_id" class="form-control mb-2">
+    {% for med in medicines %}
+    <option value="{{ med.id }}">{{ med.name }}</option>
+    {% endfor %}
+  </select>
+
+  <input
+    type="number"
+    name="quantity"
+    class="form-control mb-2"
+    placeholder="Quantity"
+    required
+    min="1"
+  />
+  <button class="btn btn-primary">Add Item <i class="fa-solid fa-cart-plus"></i></button>
+</form>
+
+<hr />
+
+<!-- Bill Table -->
+{% if bill_items %}
+<table class="table table-bordered">
+  <tr>
+    <th>Name</th>
+    <th>Qty</th>
+    <th>Price</th>
+    <th>Total</th>
+    <th></th>
+  </tr>
+
+  {% for item in bill_items %}
+  <tr>
+    <td>{{ item.name }}</td>
+    <td>
+      <form method="POST" action="/update-bill/">
+        {% csrf_token %}
+        <input type="hidden" name="index" value="{{ forloop.counter0 }}" />
+        <input
+          type="number"
+          name="quantity"
+          value="{{ item.quantity }}"
+          min="1"
+          style="width: 60px"
+        />
+        <button class="btn btn-sm btn-success">✔</button>
+      </form>
+    </td>
+    <td>{{ item.price }}</td>
+    <td>{{ item.total }}</td>
+
+    <td>
+      <form method="POST" action="/remove-from-bill/">
+        {% csrf_token %}
+        <input type="hidden" name="index" value="{{ forloop.counter0 }}" />
+        <button class="btn btn-danger btn-sm">❌</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %}
+
+<h4>Total: ₹{{ grand_total }}</h4>
+
+<!-- Generate Bill -->
+<form method="POST" action="/generate-bill/">
+  {% csrf_token %}
+  <button class="btn btn-success">Generate Bill <i class="fa-solid fa-credit-card"></i></button>
+</form>
+
+{% endblock %}

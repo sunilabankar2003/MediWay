@@ -1,0 +1,30 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-4">
+  <h2>Order Details 📦</h2>
+  <div class="card p-3">
+    <p><strong>Order ID:</strong> #{{ order.id }}</p>
+    <p><strong>Medicines:</strong> {{ order.medicine.name }}</p>
+    <p><strong>Price:</strong> ₹{{ order.medicine.price }}</p>
+    <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+    <p><strong>Total:</strong> ₹{{ order.total }}</p>
+    <p>
+      {% if order.prescription_file %}
+      <a href="{{ order.prescription_file.url }}" target="_blank">
+        View Prescription
+      </a>
+      {% endif %}
+    </p>
+    <p>
+      <strong>Status:</strong>
+      <span
+        class="badge {% if order.status == 'pending' %}bg-warning {% elif order.status == 'approved' %}bg-success {% elif order.status == 'rejected' %}bg-danger {% elif order.status == 'shipped' %}bg-info {% elif order.status == 'delivered' %}bg-primary {% endif %}"
+      >
+        {{ order.get_status_display }}
+      </span>
+    </p>
+    <p><strong>Ordered on:</strong> {{ order.created_at|date:'M d, Y H:i' }}</p>
+  </div>
+
+  <a href="{% url 'orders' %}" class="btn btn-primary mt-3">Back to orders</a>
+</div>
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow-sm p-4">
+      <h4 class="mb-3 text-center">💳 Complete Your Payment</h4>
+
+      <!-- Medicine Details -->
+      <div class="mb-3">
+        <h5>{{ order.medicine.name }}</h5>
+        <p class="text-muted">{{ order.medicine.company }}</p>
+      </div>
+
+      <!-- Price Info -->
+      <div class="mb-3">
+        {% comment %} <p><strong>Price:</strong> ₹{{ order.medicine.price }}</p>
+        <p><strong>Quantity:</strong> {{ order.quantity }}</p>
+        <hr /> {% endcomment %}
+        <hr>
+        <h5 class="text-center"><strong>Total: ₹{{ total }}</strong></h5>
+        <hr>
+      </div>
+
+      <!-- Prescription Warning -->
+      {% if order.medicine.requires_prescription %}
+      <div class="alert alert-warning">
+        ⚠ This medicine requires a prescription
+      </div>
+      {% endif %}
+
+      <!-- Razorpay Button -->
+      <button href="/payment-success/" id="pay-btn" class="btn btn-primary w-100">
+        Pay Now <i class="fa-solid fa-credit-card"></i>
+      </button>
+      <a href="/payment-success/" class="btn btn-success mt-3 w-100">
+        Demo Payment Success
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Razorpay Script -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+<script>
+  var options = {
+    key: "{{ razorpay_key }}",
+    amount: "{{ payment.amount }}",
+    currency: "INR",
+    order_id: "{{ payment.id }}",
+    name: "MediWay",
+    description: "Medicine Purchase",
+
+    handler: function (response) {
+      fetch("/verify-payment/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify(response),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "success") {
+            window.location.href = "/payment-success/";
+          } else {
+            window.location.href = "/payment-failed/";
+          }
+        });
+    },
+  };
+
+  var rzp = new Razorpay(options);
+
+  document.getElementById("pay-btn").onclick = function (e) {
+    rzp.open();
+    e.preventDefault();
+  };
+</script>
+
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="card shadow p-4">
+  <div class="text-center mb-3">
+    <img
+      src="{% static 'img/logo_.png' %}"
+      alt="MediWay"
+      height="60"
+      class="mb-2"
+    />
+  </div>
+  <p><strong>Customer:</strong> {{ bill.customer_name }}</p>
+  <p><strong>Mobile:</strong> {{ bill.mobile }}</p>
+  <p><strong>Date:</strong> {{ bill.created_at }}</p>
+
+  <hr />
+
+  <table class="table table-bordered">
+    <tr>
+      <th>Medicine</th>
+      <th>Qty</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+
+    {% for item in items %}
+    <tr>
+      <td>{{ item.medicine.name }}</td>
+      <td>{{ item.quantity }}</td>
+      <td>₹{{ item.price }}</td>
+      <td>₹{{ item.total }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <h4>Total: ₹{{ bill.total_amount }}</h4>
+
+  <div class="no-print">
+    <a href="{% url 'download_invoice' bill.id %}" class="btn btn-success mt-3">
+      Download PDF <i class="fa-solid fa-download"></i>
+    </a>
+    <button onclick="window.print()" class="btn btn-primary mt-3">
+      Print <i class="fa-solid fa-print"></i>
+    </button>
+    <a href="/billing/" class="btn btn-secondary mt-3"
+      >Back <i class="fa-solid fa-circle-left"></i
+    ></a>
+  </div>
+</div>
+
+{% endblock %}

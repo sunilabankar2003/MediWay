@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: Arial;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        border: 1px solid black;
+        padding: 8px;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <img
+      src="A:\Codes\MediWay\static\img\logo_.png"
+      alt="MediWay"
+      height="60"
+      ,
+      class="me-2"
+    />
+    <br /><br />
+    <p><strong>Date:</strong> {{ current_datetime|date:"d M Y" }}</p>
+    <p><strong>Time:</strong> {{ current_datetime|time:"H:i" }}</p>
+    <p><strong>Name:</strong> {{ bill.customer_name }}</p>
+    <p><strong>Mobile:</strong> {{ bill.mobile }}</p>
+
+    <table>
+      <tr>
+        <th>Medicine</th>
+        <th>Qty</th>
+        <th>Price</th>
+        <th>Total</th>
+      </tr>
+
+      {% for item in items %}
+      <tr>
+        <td>{{ item.medicine.name }}</td>
+        <td>{{ item.quantity }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.total }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+
+    <h3>Total: {{ bill.total_amount }}</h3>
+  </body>
+</html> 

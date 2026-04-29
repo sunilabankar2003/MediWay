@@ -1,0 +1,108 @@
+{% extends 'base.html' %} {% block content %}
+
+<form method="GET" class="mb-4">
+  <div class="input-group">
+    <input
+      type="text"
+      name="q"
+      value="{{ request.GET.q }}"
+      class="form-control"
+      placeholder="Search medicines..."
+    />
+    <button class="btn btn-outline-secondary" type="submit">
+      <i class="fa-solid fa-magnifying-glass"></i></i>
+    </button>
+  </div>
+</form>
+
+<div class="row g-4">
+  {% for medicine in page_obj %}
+  <div class="col-md-4">
+    <div class="card shadow-sm h-100">
+      <!-- Image clickable -->
+      <a href="/medicine/{{ medicine.id }}/">
+        <img
+          src="{{ medicine.image }}"
+          class="card-img-top"
+          style="
+            height: 200px;
+            width: 100%;
+            object-fit: contain;
+            background: #f8f9fa;
+            "
+        />
+      </a>
+
+      <div class="card-body d-flex flex-column">
+        <!-- Name clickable -->
+        <a
+          href="/medicine/{{ medicine.id }}/"
+          style="text-decoration: none; color: black"
+        >
+          <h5>
+            {{ medicine.name }}
+            {% if medicine.requires_prescription %}<span class="badge bg-warning">Rx</span>{% endif %}
+          </h5>
+        </a>
+
+        <p>₹{{ medicine.price }}</p>
+        <p class="text-muted">{{ medicine.company }}</p>
+
+        <form method="POST" action="/add-to-cart/" class="mt-auto">
+          {% csrf_token %}
+          <input type="hidden" name="medicine_id" value="{{ medicine.id }}" />
+          <button class="btn btn-primary w-100">Add to Cart <i class="fa-solid fa-cart-plus"></i></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+
+<!-- Pagination -->
+<nav aria-label="Medicine pagination" class="mt-4">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page=1"
+        >First</a
+      >
+    </li>
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}"
+        >Previous</a
+      >
+    </li>
+    {% endif %}
+
+    <li class="page-item disabled">
+      <span class="page-link"
+        >Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span
+      >
+    </li>
+
+    {% if page_obj.has_next %}
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}"
+        >Next</a
+      >
+    </li>
+    <li class="page-item">
+      <a
+        class="page-link"
+        href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.paginator.num_pages }}"
+        >Last</a
+      >
+    </li>
+    {% endif %}
+  </ul>
+</nav>
+
+{% endblock %}

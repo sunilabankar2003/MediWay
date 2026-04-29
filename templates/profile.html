@@ -1,0 +1,83 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card shadow p-4">
+      <h3 class="text-center mb-3">Your Profile</h3>
+
+      {% if message %}
+      <p class="text-success text-center">{{ message }}</p>
+      {% endif %} {% if error %}
+      <p class="text-danger text-center">{{ error }}</p>
+      {% endif %}
+
+      <form method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            name="username"
+            class="form-control"
+            value="{{ user.username }}"
+            required
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            name="email"
+            class="form-control"
+            value="{{ user.email }}"
+          />
+        </div>
+
+        <hr />
+
+        <p>
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#passwordCollapse"
+            aria-expanded="false"
+            aria-controls="passwordCollapse"
+          >
+            Change Password
+          </button>
+        </p>
+
+        <div class="collapse" id="passwordCollapse">
+          <div class="card card-body">
+            <div class="mb-3">
+              <label class="form-label">New password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Enter new password"
+              />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Confirm new password</label>
+              <input
+                type="password"
+                name="password2"
+                class="form-control"
+                placeholder="Confirm new password"
+              />
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary w-100">Save changes</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
