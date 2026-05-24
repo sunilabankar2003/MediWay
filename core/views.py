@@ -83,20 +83,27 @@ def signup_view(request):
         username = request.POST['username']
         email = request.POST['email']
         password = request.POST['password']
+        confirm_password = request.POST['confirm_password']
 
         if User.objects.filter(username=username).exists():
             return render(request, 'signup.html', {'error': 'Username already exists ❌'})
+
         if User.objects.filter(email=email).exists():
             return render(request, 'signup.html', {'error': 'Email already exists ❌'})
+
         if password != confirm_password:
             return render(request, 'signup.html', {'error': 'Passwords do not match ❌'})
 
-        user = User.objects.create_user(username=username, email=email, password=password)
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
         login(request, user)
         return redirect('/')
 
     return render(request, 'signup.html')
-
 
 @login_required(login_url='/login/')
 def profile_view(request):
