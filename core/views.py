@@ -46,7 +46,7 @@ def home(request):
     else:
         medicines = Medicine.objects.all()
 
-    paginator = Paginator(medicines, 9)  
+    paginator = Paginator(medicines, 12)  
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -521,7 +521,7 @@ def add_to_bill(request):
     return redirect('/billing/')
 
 def billing(request):
-    medicines = Medicine.objects.all()
+    medicines = Medicine.objects.all().order_by('name')
 
     bill_items = request.session.get('bill_items', [])
     customer = request.session.get('customer')

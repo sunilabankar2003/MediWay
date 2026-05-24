@@ -9,27 +9,30 @@
       class="form-control"
       placeholder="Search medicines..."
     />
+
     <button class="btn btn-outline-secondary" type="submit">
-      <i class="fa-solid fa-magnifying-glass"></i></i>
+      <i class="fa-solid fa-magnifying-glass"></i>
     </button>
   </div>
 </form>
 
 <div class="row g-4">
   {% for medicine in page_obj %}
-  <div class="col-md-4">
-    <div class="card shadow-sm h-100">
+
+  <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+    <div class="card shadow-sm h-100 border-0">
       <!-- Image clickable -->
       <a href="/medicine/{{ medicine.id }}/">
         <img
           src="{{ medicine.image }}"
-          class="card-img-top"
+          class="card-img-top p-3"
+          alt="{{ medicine.name }}"
           style="
-            height: 200px;
+            height: 220px;
             width: 100%;
             object-fit: contain;
             background: #f8f9fa;
-            "
+          "
         />
       </a>
 
@@ -39,19 +42,29 @@
           href="/medicine/{{ medicine.id }}/"
           style="text-decoration: none; color: black"
         >
-          <h5>
-            {{ medicine.name }}
-            {% if medicine.requires_prescription %}<span class="badge bg-warning">Rx</span>{% endif %}
+          <h5 class="card-title">
+            {{ medicine.name }} {% if medicine.requires_prescription %}
+            <span class="badge bg-warning text-dark">Rx</span>
+            {% endif %}
           </h5>
         </a>
 
-        <p>₹{{ medicine.price }}</p>
-        <p class="text-muted">{{ medicine.company }}</p>
+        <!-- Price -->
+        <p class="fw-bold fs-5 mb-1">₹{{ medicine.price }}</p>
 
+        <!-- Company -->
+        <p class="text-muted small mb-3">{{ medicine.company }}</p>
+
+        <!-- Add to cart -->
         <form method="POST" action="/add-to-cart/" class="mt-auto">
           {% csrf_token %}
+
           <input type="hidden" name="medicine_id" value="{{ medicine.id }}" />
-          <button class="btn btn-primary w-100">Add to Cart <i class="fa-solid fa-cart-plus"></i></button>
+
+          <button class="btn btn-primary w-100">
+            Add to Cart
+            <i class="fa-solid fa-cart-plus"></i>
+          </button>
         </form>
       </div>
     </div>
@@ -61,46 +74,57 @@
 </div>
 
 <!-- Pagination -->
-<nav aria-label="Medicine pagination" class="mt-4">
-  <ul class="pagination justify-content-center">
+
+<nav aria-label="Medicine pagination" class="mt-5">
+  <ul class="pagination justify-content-center flex-wrap">
     {% if page_obj.has_previous %}
+
     <li class="page-item">
       <a
         class="page-link"
         href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page=1"
-        >First</a
       >
+        First
+      </a>
     </li>
+
     <li class="page-item">
       <a
         class="page-link"
         href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.previous_page_number }}"
-        >Previous</a
       >
+        Previous
+      </a>
     </li>
+
     {% endif %}
 
     <li class="page-item disabled">
-      <span class="page-link"
-        >Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span
-      >
+      <span class="page-link">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+      </span>
     </li>
 
     {% if page_obj.has_next %}
+
     <li class="page-item">
       <a
         class="page-link"
         href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.next_page_number }}"
-        >Next</a
       >
+        Next
+      </a>
     </li>
+
     <li class="page-item">
       <a
         class="page-link"
         href="?{% if request.GET.q %}q={{ request.GET.q }}&{% endif %}page={{ page_obj.paginator.num_pages }}"
-        >Last</a
       >
+        Last
+      </a>
     </li>
+
     {% endif %}
   </ul>
 </nav>

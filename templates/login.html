@@ -1,47 +1,55 @@
 {% extends 'base.html' %} {% load static %} {% block content %}
 
-<div class="row justify-content-center">
-  <div class="col-md-4">
-    <div class="card shadow p-4">
-      <div class="text-center mb-3">
-        <img
-          src="{% static 'img/logo_.png' %}"
-          alt="MediWay"
-          height="40"
-          class="mb-2"
-        />
-        <h3 class="mb-0">Login 🔐</h3>
+<div class="container-fluid px-3">
+  <div class="row justify-content-center">
+    <div class="col-12 col-sm-10 col-md-6 col-lg-4">
+      <div class="card shadow border-0 rounded-4 p-4 mt-5 mt-md-5">
+        <div class="text-center mb-4">
+          <img
+            src="{% static 'img/logo_.png' %}"
+            alt="MediWay"
+            class="img-fluid mb-2"
+            style="max-height: 55px"
+          />
+
+          <h3 class="fw-bold mb-0">Login 🔐</h3>
+        </div>
+
+        {% if error %}
+        <p class="text-danger text-center">{{ error }}</p>
+        {% endif %}
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="mb-3">
+            <input
+              type="email"
+              name="email"
+              class="form-control form-control-lg"
+              placeholder="Email"
+              required
+            />
+          </div>
+
+          <div class="mb-3">
+            <input
+              type="password"
+              name="password"
+              class="form-control form-control-lg"
+              placeholder="Password"
+              required
+            />
+          </div>
+
+          <button class="btn btn-primary btn-lg w-100">Login</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+          Don't have an account?
+          <a href="/signup/" class="text-decoration-none"> Signup </a>
+        </p>
       </div>
-
-      {% if error %}
-      <p class="text-danger text-center">{{ error }}</p>
-      {% endif %}
-
-      <form method="POST">
-        {% csrf_token %}
-
-        <input
-          type="email"
-          name="email"
-          class="form-control mb-3"
-          placeholder="Email"
-          required
-        />
-
-        <input
-          type="password"
-          name="password"
-          class="form-control mb-3"
-          placeholder="Password"
-          required
-        />
-
-        <button class="btn btn-primary w-100">Login</button>
-      </form>
-
-      <p class="text-center mt-3">
-        Don't have an account? <a href="/signup/">Signup</a>
-      </p>
     </div>
   </div>
 </div>
